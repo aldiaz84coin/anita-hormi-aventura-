@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anita y la Hormiga: Misión Imposible (pero divertida)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+      overflow: hidden;
+      background: #0a0e27;
+    }
+
+    #root {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .screen {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .illustration {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .illustration::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 150px;
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+      pointer-events: none;
+    }
+
+    .content {
+      background: rgba(255, 255, 255, 0.98);
+      padding: 1.5rem;
+      border-radius: 20px 20px 0 0;
+      max-height: 50vh;
+      overflow-y: auto;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      color: #5a67d8;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .text {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .button {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(245, 87, 108, 0.4);
+    }
+
+    .button:active {
+      transform: translateY(0);
+    }
+
+    .button.secondary {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .option-button {
+      background: white;
+      border: 3px solid #5a67d8;
+      color: #5a67d8;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      font-family: inherit;
+      font-weight: bold;
+    }
+
+    .option-button:hover {
+      background: #5a67d8;
+      color: white;
+      transform: translateX(10px);
+    }
+
+    .option-button.correct {
+      background: #48bb78;
+      color: white;
+      border-color: #48bb78;
+    }
+
+    .option-button.incorrect {
+      background: #f56565;
+      color: white;
+      border-color: #f56565;
+    }
+
+    .star-game {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background: #1a202c;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .star {
+      position: absolute;
+      font-size: 2rem;
+      cursor: pointer;
+      animation: fall 3s linear;
+      user-select: none;
+    }
+
+    @keyframes fall {
+      from {
+        top: -50px;
+      }
+      to {
+        top: 100%;
+      }
+    }
+
+    .score {
+      font-size: 1.5rem;
+      color: #5a67d8;
+      text-align: center;
+      margin: 1rem 0;
+      font-weight: bold;
+    }
+
+    .sorting-game {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .item-card {
+      background: white;
+      border: 3px solid #cbd5e0;
+      padding: 1rem;
+      border-radius: 15px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-weight: bold;
+    }
+
+    .item-card.selected {
+      border-color: #5a67d8;
+      background: #ebf4ff;
+      transform: scale(1.05);
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #f093fb;
+      top: -10px;
+      animation: confetti-fall 3s linear;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        top: 100vh;
+        transform: rotate(360deg);
+      }
+    }
+
+    .buttons-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      margin: 1rem 0;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    }
+
+    .badge-title {
+      font-size: 2rem;
+      color: #744210;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 1.5rem;
+      }
+      
+      .text {
+        font-size: 1rem;
+      }
+      
+      .button {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+      }
+    }
+  </style>
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      margin: 1rem 0;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    }
+
+    .badge-title {
+      font-size: 2rem;
+      color: #744210;
+      margin-bottom: 0.5rem;
+    }
+
+    .buttons-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ========================================
+    // 🎨 CONFIGURACIÓN DE IMÁGENES
+    // ========================================
+    // Pega aquí las URLs de tus 9 ilustraciones
+    // Solo necesitas cambiar las URLs entre las comillas
+    
+    const MIS_IMAGENES = {
+      // PANTALLA 0 - Bienvenida (Anita con Hormi en Madrid)
+      bienvenida: 'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?w=800&q=80',
+      
+      // PANTALLA 1 - Barrio de las Letras (Calles con libros)
+      barrioLetras: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=80',
+      
+      // PANTALLA 2 - Ministerio de Educación (Edificio del ministerio)
+      ministerio: 'https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80',
+      
+      // PANTALLA 3 - El Examen (Pizarra con checklist)
+      examen: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80',
+      
+      // PANTALLA 4 - Entrenamiento Espacial (Espacio con estrellas)
+      entrenamiento: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&q=80',
+      
+      // PANTALLA 5 - Problema en la Nave (Nave con humo)
+      problemaNave: 'https://images.unsplash.com/photo-1516849677043-ef67c9557e16?w=800&q=80',
+      
+      // PANTALLA 6 - Preparativos del Viaje (Maletas y mapas)
+      preparativos: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+      
+      // PANTALLA 7 - Viaje a Asia (Avión sobre Asia)
+      asia: 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&q=80',
+      
+      // PANTALLA 8 - Final (Medalla de Misión Completa)
+      medalla: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
+    };
+    
+    // ========================================
+    // 🎨 FIN DE CONFIGURACIÓN DE IMÁGENES
+    // ========================================
+
+    function App() {
+      const [currentScreen, setCurrentScreen] = useState(0);
+      const [score, setScore] = useState(0);
+      const [showConfetti, setShowConfetti] = useState(false);
+
+      const screens = [
+        // PANTALLA 0 - Bienvenida
+        {
+          backgroundImage: MIS_IMAGENES.bienvenida,
+          backgroundGradient: 'linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%)',
+          title: '¡Bienvenido a la Aventura!',
+          text: '¡Hola! Soy Anita, futura astronauta… y esta es mi compañera Hormi 🐜. ¿Nos ayudas a cumplir nuestra misión?',
+          type: 'intro',
+          actions: [
+            { text: '👉 Comenzar aventura', next: 1 }
+          ]
+        },
+        // PANTALLA 1 - Barrio de las Letras
+        {
+          backgroundImage: MIS_IMAGENES.barrioLetras,
+          backgroundGradient: 'linear-gradient(135deg, rgba(250, 112, 154, 0.75) 0%, rgba(254, 225, 64, 0.75) 100%)',
+          title: 'El Barrio de las Letras',
+          text: 'Nos hemos perdido buscando el mapa estelar… ¡y hemos acabado entre poetas! 📍 En el corazón de Madrid',
+          type: 'question',
+          question: '¿Qué hacemos primero?',
+          options: [
+            { text: '📝 Preguntar a un escritor', correct: true },
+            { text: '🕊️ Seguir a una paloma', correct: false },
+            { text: '📖 Leer todos los versos del suelo', correct: false }
+          ],
+          correctNext: 2,
+          incorrectText: '¡Ups! Las palomas solo saben de migas, no de mapas estelares 😅'
+        },
+        // PANTALLA 2 - Ministerio de Educación
+        {
+          backgroundImage: MIS_IMAGENES.ministerio,
+          backgroundGradient: 'linear-gradient(135deg, rgba(168, 237, 234, 0.75) 0%, rgba(254, 214, 227, 0.75) 100%)',
+          title: 'Ministerio de Educación',
+          text: 'Para ser astronauta… ¡necesitamos un permiso oficial! Estamos en el Ministerio de Educación y Formación Profesional.',
+          type: 'sorting',
+          question: 'Ordena los papeles correctos (elige 3):',
+          items: [
+            { text: '📜 Diploma', correct: true },
+            { text: '🪖 Casco espacial', correct: true },
+            { text: '🍪 Galletas espaciales', correct: false },
+            { text: '📖 Manual de hormigas', correct: true },
+            { text: '🎮 Videojuego', correct: false },
+            { text: '🏀 Balón', correct: false }
+          ],
+          requiredCorrect: 3,
+          nextScreen: 3
+        },
+        // PANTALLA 3 - El Examen
+        {
+          backgroundImage: MIS_IMAGENES.examen,
+          backgroundGradient: 'linear-gradient(135deg, rgba(255, 236, 210, 0.8) 0%, rgba(252, 182, 159, 0.8) 100%)',
+          title: 'El Examen Imposible',
+          text: '¡Hormi se ha convertido en profesora! 🐜📚 Veamos si prestaste atención...',
+          type: 'question',
+          question: '¿Qué necesita un astronauta?',
+          options: [
+            { text: '💪 Valor', correct: false },
+            { text: '🔍 Curiosidad', correct: false },
+            { text: '👥 Trabajo en equipo', correct: false },
+            { text: '⭐ Todas las anteriores', correct: true }
+          ],
+          correctNext: 4,
+          incorrectText: '¡Casi! Un astronauta necesita TODAS esas cualidades 🌟'
+        },
+        // PANTALLA 4 - Entrenamiento
+        {
+          backgroundImage: MIS_IMAGENES.entrenamiento,
+          backgroundGradient: 'linear-gradient(135deg, rgba(79, 172, 254, 0.8) 0%, rgba(0, 242, 254, 0.8) 100%)',
+          title: 'Entrenamiento Espacial',
+          text: '¡Hora de entrenar en gravedad cero! 🌌 Toca las estrellas antes de que caigan.',
+          type: 'game',
+          targetScore: 10,
+          nextScreen: 5
+        },
+        // PANTALLA 5 - Problema en la Nave
+        {
+          backgroundImage: MIS_IMAGENES.problemaNave,
+          backgroundGradient: 'linear-gradient(135deg, rgba(255, 154, 158, 0.85) 0%, rgba(254, 207, 239, 0.85) 100%)',
+          title: 'Problema en la Nave',
+          text: '¡Oh no! ¡El motor huele a chocolate! 🚨🍫',
+          type: 'question',
+          question: '¿Qué hacemos?',
+          options: [
+            { text: '📞 Llamar a soporte galáctico', correct: false },
+            { text: '🔧 Reparar con chicle', correct: false },
+            { text: '🐜 Pedir ayuda a la hormiga', correct: true }
+          ],
+          correctNext: 6,
+          incorrectText: '¡Hormi es la experta en problemas imposibles! 🐜✨'
+        },
+        // PANTALLA 6 - Preparativos del Viaje
+        {
+          backgroundImage: MIS_IMAGENES.preparativos,
+          backgroundGradient: 'linear-gradient(135deg, rgba(251, 194, 235, 0.8) 0%, rgba(166, 193, 238, 0.8) 100%)',
+          title: 'Preparativos del Viaje Final',
+          text: '¡Es hora de hacer las maletas para nuestro viaje a Asia! 🎒✈️',
+          type: 'sorting',
+          question: 'Elige qué llevar (selecciona los 3 correctos):',
+          items: [
+            { text: '📷 Cámara', correct: true },
+            { text: '📔 Diario de viaje', correct: true },
+            { text: '🗣️ Traductor', correct: true },
+            { text: '❄️ Nevera portátil', correct: false },
+            { text: '🛋️ Sofá inflable', correct: false },
+            { text: '🎪 Carpa de circo', correct: false }
+          ],
+          requiredCorrect: 3,
+          nextScreen: 7
+        },
+        // PANTALLA 7 - Viaje a Asia
+        {
+          backgroundImage: MIS_IMAGENES.asia,
+          backgroundGradient: 'linear-gradient(135deg, rgba(246, 211, 101, 0.7) 0%, rgba(253, 160, 133, 0.7) 100%)',
+          title: '¡Gran Premio: Viaje a Asia!',
+          text: '¡Lo logramos! Gracias a tu ayuda, ahora viajamos por Asia descubriendo nuevos mundos juntos. 🏯🏔️🌸',
+          type: 'celebration',
+          nextScreen: 8
+        },
+        // PANTALLA 8 - Final
+        {
+          backgroundImage: MIS_IMAGENES.medalla,
+          backgroundGradient: 'linear-gradient(135deg, rgba(255, 215, 0, 0.85) 0%, rgba(255, 237, 78, 0.85) 100%)',
+          title: '¡Misión Completada!',
+          text: '¡Felicidades!',
+          type: 'final'
+        }
+      ];
+
+      const currentScreenData = screens[currentScreen];
+
+      const triggerConfetti = () => {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 3000);
+      };
+
+      useEffect(() => {
+        if (currentScreenData.type === 'celebration') {
+          triggerConfetti();
+        }
+      }, [currentScreen]);
+
+      return (
+        <div className="screen">
+          {showConfetti && <Confetti />}
+          
+          <div 
+            className="illustration"
+            style={{
+              backgroundImage: `${currentScreenData.backgroundGradient}, url(${currentScreenData.backgroundImage})`,
+            }}
+          >
+          </div>
+
+          <div className="content">
+            <h1 className="title">{currentScreenData.title}</h1>
+            <p className="text">{currentScreenData.text}</p>
+
+            {currentScreenData.type === 'intro' && (
+              <div style={{ textAlign: 'center' }}>
+                <button 
+                  className="button"
+                  onClick={() => setCurrentScreen(currentScreenData.actions[0].next)}
+                >
+                  {currentScreenData.actions[0].text}
+                </button>
+              </div>
+            )}
+
+            {currentScreenData.type === 'question' && (
+              <QuestionScreen 
+                data={currentScreenData}
+                onCorrect={() => {
+                  setScore(score + 1);
+                  triggerConfetti();
+                  setTimeout(() => setCurrentScreen(currentScreenData.correctNext), 2000);
+                }}
+              />
+            )}
+
+            {currentScreenData.type === 'sorting' && (
+              <SortingGame
+                data={currentScreenData}
+                onComplete={() => {
+                  setScore(score + 1);
+                  triggerConfetti();
+                  setTimeout(() => setCurrentScreen(currentScreenData.nextScreen), 2000);
+                }}
+              />
+            )}
+
+            {currentScreenData.type === 'game' && (
+              <StarGame
+                targetScore={currentScreenData.targetScore}
+                onComplete={() => {
+                  setScore(score + 1);
+                  triggerConfetti();
+                  setTimeout(() => setCurrentScreen(currentScreenData.nextScreen), 1000);
+                }}
+              />
+            )}
+
+            {currentScreenData.type === 'celebration' && (
+              <div style={{ textAlign: 'center' }}>
+                <p className="text" style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>
+                  ✨ ¡Aventura completada con éxito! ✨
+                </p>
+                <button 
+                  className="button"
+                  onClick={() => setCurrentScreen(currentScreenData.nextScreen)}
+                >
+                  Ver recompensa 🎁
+                </button>
+              </div>
+            )}
+
+            {currentScreenData.type === 'final' && (
+              <div>
+                <div className="badge">
+                  <div className="badge-title">🏅 Ayudante Espacial 🏅</div>
+                  <div className="badge-title">Nivel Supremo</div>
+                </div>
+                <p className="text" style={{ textAlign: 'center', marginTop: '1rem' }}>
+                  Has ayudado a Anita y Hormi a completar su misión imposible (pero divertida) 🚀🐜
+                </p>
+                <div className="buttons-row">
+                  <button 
+                    className="button"
+                    onClick={() => {
+                      setCurrentScreen(0);
+                      setScore(0);
+                    }}
+                  >
+                    🔁 Volver a jugar
+                  </button>
+                  <button 
+                    className="button secondary"
+                    onClick={() => alert('¡Comparte esta aventura con tus amigos! 🌟')}
+                  >
+                    📤 Compartir
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function QuestionScreen({ data, onCorrect }) {
+      const [selectedOption, setSelectedOption] = useState(null);
+      const [showFeedback, setShowFeedback] = useState(false);
+
+      const handleOptionClick = (option, index) => {
+        setSelectedOption(index);
+        setShowFeedback(true);
+
+        if (option.correct) {
+          setTimeout(() => {
+            onCorrect();
+          }, 1500);
+        }
+      };
+
+      const handleRetry = () => {
+        setSelectedOption(null);
+        setShowFeedback(false);
+      };
+
+      return (
+        <div>
+          <p className="text" style={{ fontWeight: 'bold', fontSize: '1.3rem' }}>
+            {data.question}
+          </p>
+          <div className="options">
+            {data.options.map((option, index) => (
+              <button
+                key={index}
+                className={`option-button ${
+                  selectedOption === index
+                    ? option.correct
+                      ? 'correct'
+                      : 'incorrect'
+                    : ''
+                }`}
+                onClick={() => !showFeedback && handleOptionClick(option, index)}
+                disabled={showFeedback}
+              >
+                {option.text}
+              </button>
+            ))}
+          </div>
+          {showFeedback && selectedOption !== null && !data.options[selectedOption].correct && (
+            <div>
+              <p className="text" style={{ color: '#f56565', marginTop: '1rem', fontWeight: 'bold' }}>
+                {data.incorrectText}
+              </p>
+              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <button className="button secondary" onClick={handleRetry}>
+                  🔄 Intentar de nuevo
+                </button>
+              </div>
+            </div>
+          )}
+          {showFeedback && selectedOption !== null && data.options[selectedOption].correct && (
+            <p className="text" style={{ color: '#48bb78', marginTop: '1rem', fontWeight: 'bold' }}>
+              ¡Correcto! ¡Excelente trabajo! 🎉
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    function SortingGame({ data, onComplete }) {
+      const [selectedItems, setSelectedItems] = useState([]);
+      const [submitted, setSubmitted] = useState(false);
+      const [isCorrect, setIsCorrect] = useState(false);
+
+      const toggleItem = (index) => {
+        if (submitted) return;
+        if (selectedItems.includes(index)) {
+          setSelectedItems(selectedItems.filter(i => i !== index));
+        } else {
+          setSelectedItems([...selectedItems, index]);
+        }
+      };
+
+      const handleSubmit = () => {
+        setSubmitted(true);
+        const correctSelections = selectedItems.filter(i => data.items[i].correct);
+        const incorrectSelections = selectedItems.filter(i => !data.items[i].correct);
+        
+        if (correctSelections.length === data.requiredCorrect && incorrectSelections.length === 0) {
+          setIsCorrect(true);
+          setTimeout(onComplete, 1500);
+        } else {
+          setIsCorrect(false);
+        }
+      };
+
+      const handleRetry = () => {
+        setSelectedItems([]);
+        setSubmitted(false);
+        setIsCorrect(false);
+      };
+
+      return (
+        <div>
+          <p className="text" style={{ fontWeight: 'bold' }}>
+            {data.question}
+          </p>
+          <div className="sorting-game">
+            {data.items.map((item, index) => (
+              <div
+                key={index}
+                className={`item-card ${selectedItems.includes(index) ? 'selected' : ''} ${
+                  submitted
+                    ? selectedItems.includes(index)
+                      ? item.correct
+                        ? 'correct'
+                        : 'incorrect'
+                      : ''
+                    : ''
+                }`}
+                onClick={() => toggleItem(index)}
+              >
+                {item.text}
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            {!submitted && (
+              <button
+                className="button"
+                onClick={handleSubmit}
+                disabled={selectedItems.length === 0}
+              >
+                Confirmar selección
+              </button>
+            )}
+          </div>
+          {submitted && (
+            <div>
+              <p className="text" style={{ 
+                color: isCorrect ? '#48bb78' : '#f56565',
+                marginTop: '1rem',
+                fontWeight: 'bold',
+                textAlign: 'center'
+              }}>
+                {isCorrect ? '¡Perfecto! ✨' : '¡Intenta de nuevo! Revisa tu selección 🤔'}
+              </p>
+              {!isCorrect && (
+                <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                  <button className="button secondary" onClick={handleRetry}>
+                    🔄 Intentar de nuevo
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function StarGame({ targetScore, onComplete }) {
+      const [stars, setStars] = useState([]);
+      const [score, setScore] = useState(0);
+      const [gameActive, setGameActive] = useState(true);
+      const [timer, setTimer] = useState(15);
+
+      useEffect(() => {
+        if (!gameActive) return;
+
+        const interval = setInterval(() => {
+          if (Math.random() > 0.5) {
+            const newStar = {
+              id: Date.now(),
+              left: Math.random() * 90 + '%'
+            };
+            setStars(prev => [...prev, newStar]);
+          }
+        }, 500);
+
+        return () => clearInterval(interval);
+      }, [gameActive]);
+
+      useEffect(() => {
+        if (!gameActive) return;
+
+        const countdown = setInterval(() => {
+          setTimer(prev => {
+            if (prev <= 1) {
+              setGameActive(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+
+        return () => clearInterval(countdown);
+      }, [gameActive]);
+
+      useEffect(() => {
+        if (score >= targetScore && gameActive) {
+          setGameActive(false);
+          onComplete();
+        }
+      }, [score, targetScore, gameActive, onComplete]);
+
+      const handleStarClick = (id) => {
+        setStars(prev => prev.filter(star => star.id !== id));
+        setScore(prev => prev + 1);
+      };
+
+      return (
+        <div>
+          <div className="score">
+            ⭐ {score} / {targetScore} | ⏱️ {timer}s
+          </div>
+          <div className="star-game">
+            {stars.map(star => (
+              <div
+                key={star.id}
+                className="star"
+                style={{ left: star.left }}
+                onClick={() => handleStarClick(star.id)}
+              >
+                ⭐
+              </div>
+            ))}
+          </div>
+          {!gameActive && score < targetScore && (
+            <p className="text" style={{ color: '#f56565', textAlign: 'center' }}>
+              ¡Sigue intentando! Necesitas {targetScore} estrellas 💫
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    function Confetti() {
+      const confettiPieces = Array.from({ length: 50 }, (_, i) => ({
+        id: i,
+        left: Math.random() * 100 + '%',
+        delay: Math.random() * 1000 + 'ms',
+        color: ['#f093fb', '#f5576c', '#4facfe', '#ffd700', '#48bb78'][Math.floor(Math.random() * 5)]
+      }));
+
+      return (
+        <>
+          {confettiPieces.map(piece => (
+            <div
+              key={piece.id}
+              className="confetti"
+              style={{
+                left: piece.left,
+                animationDelay: piece.delay,
+                background: piece.color
+              }}
+            />
+          ))}
+        </>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
