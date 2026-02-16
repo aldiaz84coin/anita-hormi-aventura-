@@ -319,29 +319,31 @@
           question: '¿Qué hacemos primero?',
           options: [
             { text: '📝 Preguntar a un escritor', correct: true },
-            { text: '🕊️ Seguir a una paloma', correct: false },
+            { text: '🕊️ Ir a Matador', correct: false },
             { text: '📖 Leer todos los versos del suelo', correct: false }
           ],
           correctNext: 2,
-          incorrectText: '¡Ups! Las palomas solo saben de migas, no de mapas estelares 😅'
+          incorrectText: '¡Ups! Así no encontrarás los mapas estelares! 😅'
         },
         {
           backgroundImage: MIS_IMAGENES.ministerio,
           backgroundGradient: 'linear-gradient(135deg, rgba(168, 237, 234, 0.4) 0%, rgba(254, 214, 227, 0.4) 100%)',
           title: 'Ministerio de Educación',
-          text: 'Para ser astronauta… ¡necesitamos un permiso oficial! Estamos en el Ministerio de Educación y Formación Profesional.',
+          text: 'Para ser astronauta… ¡necesitamos un permiso oficial! Estamos en el Ministerio de Educación, Formación Profesional y Deportes.',
           type: 'sorting',
           question: 'Ordena los papeles correctos (elige 3):',
           items: [
-            { text: '📜 Diploma', correct: true },
+            { text: '📜 Permiso de Amaya', correct: true },
             { text: '🪖 Casco espacial', correct: true },
-            { text: '🍪 Galletas espaciales', correct: false },
-            { text: '📖 Manual de hormigas', correct: true },
-            { text: '🎮 Videojuego', correct: false },
-            { text: '🏀 Balón', correct: false }
+            { text: '🍪 Galletas espaciales de Tamara', correct: false },
+            { text: '📖 Manual de hormigas espaciales', correct: true },
+            { text: '🎮 Zanahoria para la rueda', correct: false },
+            { text: '🏀 Discurso del G20 para leer desde el espacio', correct: false }
           ],
           requiredCorrect: 3,
-          nextScreen: 3
+          nextScreen: 3,
+          incorrectText: '¡Ups! Menos galletas y discursos, vamos a explorar! 😅'
+     
         },
         {
           backgroundImage: MIS_IMAGENES.examen,
@@ -351,8 +353,8 @@
           type: 'question',
           question: '¿Qué necesita un astronauta?',
           options: [
-            { text: '💪 Valor', correct: false },
-            { text: '🔍 Curiosidad', correct: false },
+            { text: '💪 Dolor de culo de haberse caido', correct: false },
+            { text: '🔍 Curiosidad y mucha energía', correct: false },
             { text: '👥 Una hormiga astronauta', correct: false },
             { text: '⭐ Todas las anteriores', correct: true }
           ],
@@ -376,7 +378,7 @@
           type: 'question',
           question: '¿Qué hacemos?',
           options: [
-            { text: '📞 Llamar a soporte galáctico', correct: false },
+            { text: '📞 Dormir, como en tu entrenamiento de furgo', correct: false },
             { text: '🔧 Reparar con chicle', correct: false },
             { text: '🐜 Pedir ayuda a la hormiga', correct: true }
           ],
@@ -393,7 +395,7 @@
           items: [
             { text: '📷 Cámara', correct: true },
             { text: '📔 Diario de viaje', correct: true },
-            { text: '🗣️ Portati para teletrabajar', correct: true },
+            { text: '🗣️ Portatil para teletrabajar', correct: true },
             { text: '❄️ Nevera portátil', correct: false },
             { text: '🛋️ Sofá inflable', correct: false },
             { text: '🎪 Carpa de circo', correct: false }
