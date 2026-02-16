@@ -335,10 +335,10 @@
           items: [
             { text: '📜 Permiso de Amaya', correct: true },
             { text: '🪖 Casco espacial', correct: true },
-            { text: '🍪 Galletas espaciales de Tamara', correct: false },
+            { text: '🍪 Galletas espaciales de Tamara', correct: true },
             { text: '📖 Manual de hormigas espaciales', correct: true },
             { text: '🎮 Zanahoria para la rueda', correct: false },
-            { text: '🏀 Discurso del G20 para leer desde el espacio', correct: false }
+            { text: '🏀 Discurso del G20 para leer desde el espacio', correct: true }
           ],
           requiredCorrect: 3,
           nextScreen: 3,
@@ -374,16 +374,16 @@
           backgroundImage: MIS_IMAGENES.problemaNave,
           backgroundGradient: 'linear-gradient(135deg, rgba(255, 154, 158, 0.6) 0%, rgba(254, 207, 239, 0.6) 100%)',
           title: 'Problema en la Nave',
-          text: '¡Oh no! ¡El motor huele a chocolate! 🚨🍫',
+          text: '¡Oh no! ¡El motor huele a Jumper! 🚨🍫',
           type: 'question',
           question: '¿Qué hacemos?',
           options: [
-            { text: '📞 Dormir, como en tu entrenamiento de furgo', correct: false },
+            { text: '📞 Dormir, como en tu entrenamiento de furgo', correct: true },
             { text: '🔧 Reparar con chicle', correct: false },
             { text: '🐜 Pedir ayuda a la hormiga', correct: true }
           ],
           correctNext: 6,
-          incorrectText: '¡Hormi es la experta en problemas imposibles! 🐜✨'
+          incorrectText: '¡Hormi es la experta en problemas imposibles, aunque dormir también sirve! 🐜✨'
         },
         {
           backgroundImage: MIS_IMAGENES.preparativos,
@@ -394,7 +394,7 @@
           question: 'Elige qué llevar (selecciona los 3 correctos):',
           items: [
             { text: '📷 Cámara', correct: true },
-            { text: '📔 Diario de viaje', correct: true },
+            { text: '📔 Diario de viaje estelar', correct: true },
             { text: '🗣️ Portatil para teletrabajar', correct: true },
             { text: '❄️ Nevera portátil', correct: false },
             { text: '🛋️ Sofá inflable', correct: false },
@@ -510,11 +510,11 @@
             {currentScreenData.type === 'final' && (
               <div>
                 <div className="badge">
-                  <div className="badge-title">🏅 Ayudante Espacial 🏅</div>
-                  <div className="badge-title">Nivel Supremo</div>
+                  <div className="badge-title">🏅¡¡Increíbles conocimientos!!🏅</div>
+                  <div className="badge-title">Enhorabuena Prezioza</div>
                 </div>
                 <p className="text" style={{ textAlign: 'center', marginTop: '1rem' }}>
-                  Has ayudado a Anita y Hormi a completar su misión imposible (pero divertida) 🚀🐜
+                  Has ayudado a Anita y Hormi a completar su misión imposible, ¡Ahora toca disfrutar la recompensa!🚀🐜
                 </p>
                 <div className="buttons-row">
                   <button 
@@ -528,9 +528,9 @@
                   </button>
                   <button 
                     className="button secondary"
-                    onClick={() => alert('¡Comparte esta aventura con tus amigos! 🌟')}
+                    onClick={() => alert('¡Llama a Alvarito!, ¡¡corre!! 🌟')}
                   >
-                    📤 Compartir
+                    📤 Quiero mi viaje a Asia
                   </button>
                 </div>
               </div>
