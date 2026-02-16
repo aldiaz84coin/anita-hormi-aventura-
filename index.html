@@ -35,7 +35,6 @@
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
     .illustration {
@@ -48,6 +47,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      min-height: 50vh;
     }
 
     .illustration::before {
@@ -56,9 +56,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 150px;
-      background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+      height: 200px;
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.98), transparent);
       pointer-events: none;
+      z-index: 1;
     }
 
     .content {
@@ -209,6 +210,16 @@
       transform: scale(1.05);
     }
 
+    .item-card.correct {
+      border-color: #48bb78;
+      background: #c6f6d5;
+    }
+
+    .item-card.incorrect {
+      border-color: #f56565;
+      background: #fed7d7;
+    }
+
     .confetti {
       position: fixed;
       width: 10px;
@@ -223,14 +234,6 @@
         top: 100vh;
         transform: rotate(360deg);
       }
-    }
-
-    .buttons-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
     }
 
     .badge {
@@ -248,6 +251,14 @@
       margin-bottom: 0.5rem;
     }
 
+    .buttons-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
     @media (max-width: 768px) {
       .title {
         font-size: 1.5rem;
@@ -263,28 +274,6 @@
       }
     }
   </style>
-      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-      padding: 2rem;
-      border-radius: 20px;
-      text-align: center;
-      margin: 1rem 0;
-      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
-    }
-
-    .badge-title {
-      font-size: 2rem;
-      color: #744210;
-      margin-bottom: 0.5rem;
-    }
-
-    .buttons-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-  </style>
 </head>
 <body>
   <div id="root"></div>
@@ -295,41 +284,17 @@
     // ========================================
     // 🎨 CONFIGURACIÓN DE IMÁGENES
     // ========================================
-    // Pega aquí las URLs de tus 9 ilustraciones
-    // Solo necesitas cambiar las URLs entre las comillas
-    
     const MIS_IMAGENES = {
-      // PANTALLA 0 - Bienvenida (Anita con Hormi en Madrid)
       bienvenida: 'https://i.imgur.com/Mak6MWw.jpg',
-      
-      // PANTALLA 1 - Barrio de las Letras (Calles con libros)
       barrioLetras: 'https://i.imgur.com/Z8CIDDb.jpg',
-      
-      // PANTALLA 2 - Ministerio de Educación (Edificio del ministerio)
       ministerio: 'https://i.imgur.com/QLzO83Q.jpg',
-      
-      // PANTALLA 3 - El Examen (Pizarra con checklist)
       examen: 'https://i.imgur.com/0CXNKi3.jpg',
-      
-      // PANTALLA 4 - Entrenamiento Espacial (Espacio con estrellas)
       entrenamiento: 'https://i.imgur.com/82l8dh8.jpg',
-      
-      // PANTALLA 5 - Problema en la Nave (Nave con humo)
       problemaNave: 'https://images.unsplash.com/photo-1516849677043-ef67c9557e16?w=800&q=80',
-      
-      // PANTALLA 6 - Preparativos del Viaje (Maletas y mapas)
       preparativos: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
-      
-      // PANTALLA 7 - Viaje a Asia (Avión sobre Asia)
       asia: 'https://i.imgur.com/OOOD8ZJ.jpg',
-      
-      // PANTALLA 8 - Final (Medalla de Misión Completa)
       medalla: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
     };
-    
-    // ========================================
-    // 🎨 FIN DE CONFIGURACIÓN DE IMÁGENES
-    // ========================================
 
     function App() {
       const [currentScreen, setCurrentScreen] = useState(0);
@@ -337,21 +302,17 @@
       const [showConfetti, setShowConfetti] = useState(false);
 
       const screens = [
-        // PANTALLA 0 - Bienvenida
         {
           backgroundImage: MIS_IMAGENES.bienvenida,
-          backgroundGradient: 'linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 100%)',
           title: '¡Bienvenido a la Aventura!',
           text: '¡Hola! Soy Anita, futura astronauta… y esta es mi compañera Hormi 🐜. ¿Nos ayudas a cumplir nuestra misión?',
           type: 'intro',
-          actions: [
-            { text: '👉 Comenzar aventura', next: 1 }
-          ]
+          actions: [{ text: '👉 Comenzar aventura', next: 1 }]
         },
-        // PANTALLA 1 - Barrio de las Letras
         {
           backgroundImage: MIS_IMAGENES.barrioLetras,
-          backgroundGradient: 'linear-gradient(135deg, rgba(250, 112, 154, 0.75) 0%, rgba(254, 225, 64, 0.75) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(250, 112, 154, 0.4) 0%, rgba(254, 225, 64, 0.4) 100%)',
           title: 'El Barrio de las Letras',
           text: 'Nos hemos perdido buscando el mapa estelar… ¡y hemos acabado entre poetas! 📍 En el corazón de Madrid',
           type: 'question',
@@ -364,10 +325,9 @@
           correctNext: 2,
           incorrectText: '¡Ups! Las palomas solo saben de migas, no de mapas estelares 😅'
         },
-        // PANTALLA 2 - Ministerio de Educación
         {
           backgroundImage: MIS_IMAGENES.ministerio,
-          backgroundGradient: 'linear-gradient(135deg, rgba(168, 237, 234, 0.75) 0%, rgba(254, 214, 227, 0.75) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(168, 237, 234, 0.4) 0%, rgba(254, 214, 227, 0.4) 100%)',
           title: 'Ministerio de Educación',
           text: 'Para ser astronauta… ¡necesitamos un permiso oficial! Estamos en el Ministerio de Educación y Formación Profesional.',
           type: 'sorting',
@@ -383,10 +343,9 @@
           requiredCorrect: 3,
           nextScreen: 3
         },
-        // PANTALLA 3 - El Examen
         {
           backgroundImage: MIS_IMAGENES.examen,
-          backgroundGradient: 'linear-gradient(135deg, rgba(255, 236, 210, 0.8) 0%, rgba(252, 182, 159, 0.8) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(255, 236, 210, 0.5) 0%, rgba(252, 182, 159, 0.5) 100%)',
           title: 'El Examen Imposible',
           text: '¡Hormi se ha convertido en profesora! 🐜📚 Veamos si prestaste atención...',
           type: 'question',
@@ -400,20 +359,18 @@
           correctNext: 4,
           incorrectText: '¡Casi! Un astronauta necesita TODAS esas cualidades 🌟'
         },
-        // PANTALLA 4 - Entrenamiento
         {
           backgroundImage: MIS_IMAGENES.entrenamiento,
-          backgroundGradient: 'linear-gradient(135deg, rgba(79, 172, 254, 0.8) 0%, rgba(0, 242, 254, 0.8) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(79, 172, 254, 0.5) 0%, rgba(0, 242, 254, 0.5) 100%)',
           title: 'Entrenamiento Espacial',
           text: '¡Hora de entrenar en gravedad cero! 🌌 Toca las estrellas antes de que caigan.',
           type: 'game',
           targetScore: 10,
           nextScreen: 5
         },
-        // PANTALLA 5 - Problema en la Nave
         {
           backgroundImage: MIS_IMAGENES.problemaNave,
-          backgroundGradient: 'linear-gradient(135deg, rgba(255, 154, 158, 0.85) 0%, rgba(254, 207, 239, 0.85) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(255, 154, 158, 0.6) 0%, rgba(254, 207, 239, 0.6) 100%)',
           title: 'Problema en la Nave',
           text: '¡Oh no! ¡El motor huele a chocolate! 🚨🍫',
           type: 'question',
@@ -426,10 +383,9 @@
           correctNext: 6,
           incorrectText: '¡Hormi es la experta en problemas imposibles! 🐜✨'
         },
-        // PANTALLA 6 - Preparativos del Viaje
         {
           backgroundImage: MIS_IMAGENES.preparativos,
-          backgroundGradient: 'linear-gradient(135deg, rgba(251, 194, 235, 0.8) 0%, rgba(166, 193, 238, 0.8) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(251, 194, 235, 0.5) 0%, rgba(166, 193, 238, 0.5) 100%)',
           title: 'Preparativos del Viaje Final',
           text: '¡Es hora de hacer las maletas para nuestro viaje a Asia! 🎒✈️',
           type: 'sorting',
@@ -445,19 +401,17 @@
           requiredCorrect: 3,
           nextScreen: 7
         },
-        // PANTALLA 7 - Viaje a Asia
         {
           backgroundImage: MIS_IMAGENES.asia,
-          backgroundGradient: 'linear-gradient(135deg, rgba(246, 211, 101, 0.7) 0%, rgba(253, 160, 133, 0.7) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(246, 211, 101, 0.4) 0%, rgba(253, 160, 133, 0.4) 100%)',
           title: '¡Gran Premio: Viaje a Asia!',
           text: '¡Lo logramos! Gracias a tu ayuda, ahora viajamos por Asia descubriendo nuevos mundos juntos. 🏯🏔️🌸',
           type: 'celebration',
           nextScreen: 8
         },
-        // PANTALLA 8 - Final
         {
           backgroundImage: MIS_IMAGENES.medalla,
-          backgroundGradient: 'linear-gradient(135deg, rgba(255, 215, 0, 0.85) 0%, rgba(255, 237, 78, 0.85) 100%)',
+          backgroundGradient: 'linear-gradient(135deg, rgba(255, 215, 0, 0.6) 0%, rgba(255, 237, 78, 0.6) 100%)',
           title: '¡Misión Completada!',
           text: '¡Felicidades!',
           type: 'final'
